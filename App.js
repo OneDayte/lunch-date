@@ -7,6 +7,9 @@ import SignUp from "./components/SignUp"
 import ResetPw from "./components/ResetPw"
 import CheckMail from "./components/CheckMail"
 import CreateNewPw from "./components/CreateNewPw"
+import Interests from "./components/Interests"
+import Profile from "./components/Profile"
+import AddImages from "./components/AddImages"
 
 const Stack = createStackNavigator()
 
@@ -23,6 +26,9 @@ export default function App() {
         <Stack.Screen name="Reset Pw" component={ResetPw} />
         <Stack.Screen name="Check Mail" component={CheckMail} />
         <Stack.Screen name="Create New Pw" component={CreateNewPw} />
+        <Stack.Screen name="Interests" component={Interests} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Add Images" component={AddImages} />
       </Stack.Navigator>
     </NavigationContainer>
   )

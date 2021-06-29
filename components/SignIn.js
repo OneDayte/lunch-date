@@ -39,6 +39,18 @@ export default function SignIn({ navigation }) {
       setError(true)
       setErrorMessage("Please fill out the form!")
     }
+
+    const signInObject = {
+     auth: {
+       email: email,
+       password: password
+     }
+    }
+  
+
+  axios.post("http://onedayte.herokuapp.com/auth/signin/", auth)
+  .then()
+    
   }
 
   if (!fontsLoaded) {

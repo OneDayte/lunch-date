@@ -1,3 +1,4 @@
+import { NavigationHelpersContext } from "@react-navigation/core"
 import React from "react"
 import {
   View,
@@ -9,7 +10,7 @@ import {
 } from "react-native"
 import eye from "../assets/icons/feather-eye.png"
 
-export default function CreateNewPw() {
+export default function CreateNewPw({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.greenText}>Create new password {"\n"}</Text>
@@ -43,7 +44,10 @@ export default function CreateNewPw() {
       <Text style={styles.grayText}>Both passwords must match.</Text>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Interests")}
+        >
           <Text style={styles.resetText}>Reset Password</Text>
         </TouchableOpacity>
       </View>
