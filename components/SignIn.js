@@ -14,6 +14,8 @@ import lock from "../assets/icons/material-lock-outline.png"
 import eye from "../assets/icons/feather-eye.png"
 import { useFonts } from "expo-font"
 import AppLoading from "expo-app-loading"
+import axios from "axios"
+import * as SecureStore from 'expo-secure-store'
 
 export default function SignIn({ navigation }) {
   const [username, setUsername] = useState("")
@@ -40,18 +42,33 @@ export default function SignIn({ navigation }) {
       setErrorMessage("Please fill out the form!")
     }
 
-    const signInObject = {
-     auth: {
-       email: email,
-       password: password
-     }
+  const signInObject = {
+    auth: {
+      email: username,
+      password: password
     }
-  
-
-  axios.post("http://onedayte.herokuapp.com/auth/signin/", auth)
-  .then()
-    
   }
+
+  const setUserToken = (token) => {
+    return SecureStore.setItemAsync('secure_token', token);
+  };
+
+  const getUserToken = () => {
+    return SecureStore.getItemAsync('secure_token');
+  };
+
+  axios.post("http://onedayte.herokuapp.com/auth/sign_in/", signInObject)
+  .then(response => {
+    setUserToken(response.data.jwt)
+
+    // this is how we get the token
+    // getUserToken().then(a => console.log(a))
+  })
+  .catch((err) => {
+    // to do handle error/ invalid log in
+    console.log(err)
+  })
+}
 
   if (!fontsLoaded) {
     return <AppLoading />
@@ -64,12 +81,13 @@ export default function SignIn({ navigation }) {
             <Image source={user} style={styles.icons} />
             <TextInput
               style={styles.textInput}
-              placeholder="User Name"
+              placeholder="Email"
               placeholderTextColor="#9BD09E"
               textAlign="left"
               spellCheck={false}
               value={username}
               onChangeText={onChangeUser}
+              autoCapitalize="none"
             />
           </View>
           <View style={styles.inputSection}>
