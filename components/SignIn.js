@@ -61,7 +61,20 @@ export default function SignIn({ navigation }) {
   .then(response => {
     setUserToken(response.data.jwt)
 
-    // this is how we get the token
+    axios.get("http://onedayte.herokuapp.com/users/confirmed_user",  {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': response.data.jwt
+      }
+    })
+    .then((second_response) => {
+      if (!second_response.data.completed_info) {
+        navigation.navigate("Interests")
+      } else {
+        //this is where navigation should go if they have already completed their information.
+      }
+    })
+
     // getUserToken().then(a => console.log(a))
   })
   .catch((err) => {
