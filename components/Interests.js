@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState, useEffect} from "react"
 import {
   View,
   Text,
@@ -8,8 +8,36 @@ import {
   Image,
 } from "react-native"
 import arrow from "../assets/icons/arrow0.png"
+import axios from "axios"
+import * as SecureStore from 'expo-secure-store'
 
 export default function Interests({ navigation }) {
+  const [initialState, setInitialState] = useState({})
+
+  const getUserToken = () => {
+    return SecureStore.getItemAsync('secure_token');
+  };
+
+  useEffect(() => {
+    getUserToken().then((jwtToken) => {
+      axios.get("https://onedayte.herokuapp.com/users/edit_info", {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': jwtToken
+        }
+      })
+      .then((res) => {
+        //we'll have to change up the res.data first
+        console.log('apple', res.data)
+        setInitialState(res.data)
+      })
+    })
+    .catch((err) => {
+      //handle error
+    })
+  }, [])
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>What are you looking for?</Text>
