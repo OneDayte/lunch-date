@@ -19,7 +19,6 @@ export default function Profile({ navigation }) {
           placeholder="Name"
           placeholderTextColor="#000000"
           textAlign="left"
-          secureTextEntry
         />
       </View>
       <Text>{"\n"}</Text>
@@ -210,6 +209,9 @@ const styles = StyleSheet.create({
   location: {
     flexDirection: "row",
     position: "absolute",
-    marginLeft: 195,
+    height: "58%",
+    width: "4.5%",
+    //needs responsive
+    marginLeft: 190,
   },
 })

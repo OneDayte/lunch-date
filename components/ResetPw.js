@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native"
-import email from "../assets/icons/green-email.png"
+import email from "../assets/icons/green-mail3x.png"
 
 export default function ResetPw({ navigation }) {
   return (
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   resetText: {
     color: "#9BD09E",
     fontWeight: "bold",
+    fontSize: 17,
   },
   userSection: {
     flexDirection: "row",
@@ -88,6 +89,8 @@ const styles = StyleSheet.create({
   icons: {
     zIndex: 1,
     position: "absolute",
+    height: "75%",
+    width: "7%",
     marginLeft: 10,
   },
   buttonContainer: {

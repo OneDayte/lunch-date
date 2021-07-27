@@ -1,12 +1,12 @@
 import React from "react"
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native"
-import envelope from "../assets/icons/envelope.png"
+import envelope from "../assets/icons/envelope3x.png"
 
 export default function CheckMail({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.component1}>
-        <Image source={envelope} />
+        <Image source={envelope} style={styles.envelope} />
         <Text>{"\n"}</Text>
 
         <Text style={styles.checkText}>Check your mail {"\n"}</Text>
@@ -47,6 +47,10 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     paddingRight: "5%",
     justifyContent: "space-between",
+  },
+  envelope: {
+    height: "23%",
+    width: "43%",
   },
   component1: {
     alignItems: "center",

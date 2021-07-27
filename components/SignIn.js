@@ -8,21 +8,24 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native"
-import logo from "../assets/logo/logo.png"
-import user from "../assets/icons/feather-user.png"
-import lock from "../assets/icons/material-lock-outline.png"
-import eye from "../assets/icons/feather-eye.png"
+import logo from "../assets/logo/logo3x.png"
+import user from "../assets/icons/feather-user3x.png"
+import lock from "../assets/icons/material-lock-outline3x.png"
+import greenLock from "../assets/icons/green-lock-outline2x.png"
+import eye from "../assets/icons/feather-eye3x.png"
+import darkUser from "../assets/icons/dark-feather-user3x.png"
 import { useFonts } from "expo-font"
 import AppLoading from "expo-app-loading"
 import axios from "axios"
-import * as SecureStore from 'expo-secure-store'
+import * as SecureStore from "expo-secure-store"
 
 export default function SignIn({ navigation }) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(false)
-
   const [errorMessage, setErrorMessage] = useState("")
+  const [onEmailTouch, setOnEmailTouch] = useState(false)
+  const [onPwTouch, setOnPwTouch] = useState(false)
 
   let [fontsLoaded] = useFonts({
     "custom-Font": require("../assets/fonts/SFProText-Regular.ttf"),
@@ -42,11 +45,51 @@ export default function SignIn({ navigation }) {
       setErrorMessage("Please fill out the form!")
     }
 
-  const signInObject = {
-    auth: {
-      email: username,
-      password: password
+    const signInObject = {
+      auth: {
+        email: username,
+        password: password,
+      },
     }
+
+    const setUserToken = (token) => {
+      return SecureStore.setItemAsync("secure_token", token)
+    }
+
+    const getUserToken = () => {
+      return SecureStore.getItemAsync("secure_token")
+    }
+
+    axios
+      .post("http://onedayte.herokuapp.com/auth/sign_in/", signInObject)
+      .then((response) => {
+        setUserToken(response.data.jwt)
+
+        axios
+          .get("http://onedayte.herokuapp.com/users/confirmed_user", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: response.data.jwt,
+            },
+          })
+          .then((second_response) => {
+            if (!second_response.data.completed_info) {
+              navigation.navigate("Interests")
+            } else {
+              //this is where navigation should go if they have already completed their information.
+              //possibly straight to their match?
+            }
+          })
+
+        // getUserToken().then(a => console.log(a))
+      })
+      .catch((err) => {
+        setError(true)
+        setErrorMessage(
+          "The email address and password combination does not match any account. Please try again."
+        )
+        console.log(err)
+      })
   }
 
   const setUserToken = (token) => {
@@ -88,23 +131,31 @@ export default function SignIn({ navigation }) {
   } else {
     return (
       <View style={styles.container}>
-        <Image source={logo} />
+        <Image source={logo} style={styles.logo} />
         <View style={styles.midComponent}>
           <View style={styles.inputSection}>
-            <Image source={user} style={styles.icons} />
+            <Image
+              source={onEmailTouch ? user : darkUser}
+              style={styles.userIcon}
+            />
             <TextInput
               style={styles.textInput}
               placeholder="Email"
-              placeholderTextColor="#9BD09E"
+              placeholderTextColor="#8C8C8C"
               textAlign="left"
               spellCheck={false}
               value={username}
               onChangeText={onChangeUser}
               autoCapitalize="none"
+              onTouchStart={() => setOnEmailTouch(true)}
+              onBlur={() => setOnEmailTouch(false)}
             />
           </View>
           <View style={styles.inputSection}>
-            <Image source={lock} style={styles.icons} />
+            <Image
+              source={onPwTouch ? greenLock : lock}
+              style={styles.lockIcon}
+            />
             <TextInput
               style={styles.textInput}
               placeholder="Password"
@@ -113,6 +164,8 @@ export default function SignIn({ navigation }) {
               secureTextEntry
               value={password}
               onChangeText={onChangePassword}
+              onTouchStart={() => setOnPwTouch(true)}
+              onBlur={() => setOnPwTouch(false)}
             />
             <Image source={eye} style={styles.eye} />
           </View>
@@ -166,6 +219,10 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     paddingRight: "5%",
   },
+  logo: {
+    height: 125,
+    width: 350,
+  },
   midComponent: {
     bottom: "7%",
   },
@@ -204,15 +261,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: "3%",
   },
-  icons: {
+  userIcon: {
     zIndex: 1,
     position: "absolute",
+    height: "73%",
+    width: "7.5%",
     //need this responsive
     marginLeft: 10,
+  },
+  lockIcon: {
+    zIndex: 1,
+    position: "absolute",
+    height: "73%",
+    width: "6.1%",
+    //need this responsive
+    marginLeft: 12,
   },
   eye: {
     zIndex: 1,
     position: "absolute",
+    height: "68%",
+    width: "10%",
     //need this responsive
     marginLeft: 325,
   },

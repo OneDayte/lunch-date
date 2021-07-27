@@ -6,113 +6,210 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  KeyboardAvoidingView,
 } from "react-native"
-import arrow from "../assets/icons/arrow0.png"
-import axios from "axios"
-import * as SecureStore from 'expo-secure-store'
+import arrow from "../assets/icons/arrow.png"
+import { ValuesContext } from "./context/context"
 
 export default function Interests({ navigation }) {
-  const [initialState, setInitialState] = useState({})
+  const [menSelected, setMenSelected] = useState(true)
+  const [womenSelected, setWomenSelected] = useState(false)
+  const [nonBinarySelected, setNonBinarySelected] = useState(false)
 
-  const getUserToken = () => {
-    return SecureStore.getItemAsync('secure_token');
-  };
+  const [casualSelected, setCasualSelected] = useState(true)
+  const [seriousSelected, setSeriousSelected] = useState(false)
 
-  useEffect(() => {
-    getUserToken().then((jwtToken) => {
-      axios.get("https://onedayte.herokuapp.com/users/edit_info", {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': jwtToken
-        }
-      })
-      .then((res) => {
-        //we'll have to change up the res.data first
-        console.log('apple', res.data)
-        setInitialState(res.data)
-      })
-    })
-    .catch((err) => {
-      //handle error
-    })
-  }, [])
+  const [ageMin, setAgeMin] = useState("")
+  const [ageMax, setAgeMax] = useState("")
 
+  const [location, setLocation] = useState("")
+  const [zipCode, setZipCode] = useState("")
+  const [maxDistance, setMaxDistance] = useState("")
+
+  const next = () => navigation.navigate("Profile")
+
+  const selectGender = (gender) => {
+    if (gender === "women") {
+      setWomenSelected(true)
+      setMenSelected(false)
+      setNonBinarySelected(false)
+    } else if (gender === "men") {
+      setMenSelected(true)
+      setWomenSelected(false)
+      setNonBinarySelected(false)
+    } else if (gender === "non-binary") {
+      setNonBinarySelected(true)
+      setMenSelected(false)
+      setWomenSelected(false)
+    }
+  }
+
+  const typeSelection = (type) => {
+    if (type === "casual") {
+      setCasualSelected(true)
+      setSeriousSelected(false)
+    } else if (type === "serious") {
+      setSeriousSelected(true)
+      setCasualSelected(false)
+    }
+  }
+
+  const onChangeAgeMin = (text) => {
+    setAgeMin(text)
+  }
+  const onChangeAgeMax = (text) => {
+    setAgeMax(text)
+  }
+  const onChangeLocation = (text) => {
+    setLocation(text)
+  }
+  const onChangeZipCode = (text) => {
+    setZipCode(text)
+  }
+  const onChangeMaxDistance = (text) => {
+    setMaxDistance(text)
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>What are you looking for?</Text>
-      <View>
-        <Text style={styles.text}>Interest In</Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.selectedText}>Men</Text>
+    <ValuesContext.Consumer>
+      {(context) => (
+        <KeyboardAvoidingView style={styles.container} behavior="height">
+          <Text style={styles.header}>What are you looking for?</Text>
+          <View>
+            <Text style={styles.text}>Interest In</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={menSelected ? styles.button : styles.notSelectedBtn}
+                onPress={() => selectGender("men")}
+              >
+                <Text
+                  style={menSelected ? { color: "#fff" } : { color: "#000" }}
+                >
+                  Men
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={womenSelected ? styles.button : styles.notSelectedBtn}
+                onPress={() => selectGender("women")}
+              >
+                <Text
+                  style={womenSelected ? { color: "#fff" } : { color: "#000" }}
+                >
+                  Women
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  nonBinarySelected ? styles.button : styles.notSelectedBtn
+                }
+                onPress={() => selectGender("non-binary")}
+              >
+                <Text
+                  style={
+                    nonBinarySelected ? { color: "#fff" } : { color: "#000" }
+                  }
+                >
+                  Non Binary
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.text}>Relationship Type</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={casualSelected ? styles.button : styles.notSelectedBtn}
+                onPress={() => typeSelection("casual")}
+              >
+                <Text
+                  style={casualSelected ? { color: "#fff" } : { color: "#000" }}
+                >
+                  Casual
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={seriousSelected ? styles.button : styles.notSelectedBtn}
+                onPress={() => typeSelection("serious")}
+              >
+                <Text
+                  style={
+                    seriousSelected ? { color: "#fff" } : { color: "#000" }
+                  }
+                >
+                  Serious
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.text}>Age Range</Text>
+            <View style={styles.buttonContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="18"
+                placeholderTextColor="#000000"
+                keyboardType="numeric"
+                maxLength={2}
+                onChangeText={onChangeAgeMin}
+              />
+              <Text style={styles.fixText}> til </Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="25"
+                placeholderTextColor="#000000"
+                keyboardType="numeric"
+                maxLength={2}
+                onChangeText={onChangeAgeMax}
+              />
+            </View>
+          </View>
+          <View style={styles.rowsContainer}>
+            <View style={styles.singleRowContainer}>
+              <Text style={styles.fixText}>Location</Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Oakland, CA"
+                placeholderTextColor="#000000"
+                onChangeText={onChangeLocation}
+              />
+            </View>
+          </View>
+          <View style={styles.rowsContainer}>
+            <View style={styles.singleRowContainer}>
+              <Text style={styles.fixText}>Zipcode</Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="94601"
+                placeholderTextColor="#000000"
+                onChangeZipCode={onChangeZipCode}
+              />
+            </View>
+          </View>
+          <View style={styles.rowsContainer}>
+            <View style={styles.singleRowContainer}>
+              <Text style={styles.fixText}>Max Distances</Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="50 mi"
+                placeholderTextColor="#000000"
+                keyboardType="numeric"
+                maxLength={5}
+                onChangeText={onChangeMaxDistance}
+              />
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.arrowContainer}
+            onPress={() => {
+              next()
+              context.changeValues(location)
+            }}
+          >
+            <Image source={arrow} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.notSelectedBtn}>
-            <Text>Women</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.notSelectedBtn}>
-            <Text>Binary</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View>
-        <Text style={styles.text}>Relationship Type</Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.selectedText}>Casual</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.notSelectedBtn}>
-            <Text>Serious</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View>
-        <Text style={styles.text}>Age Range</Text>
-        <View style={styles.buttonContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="18"
-            placeholderTextColor="#000000"
-          />
-          <Text style={styles.text}> til </Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="25"
-            placeholderTextColor="#000000"
-          />
-        </View>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>Location</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Oakland, CA"
-          placeholderTextColor="#000000"
-        />
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>Zipcode</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="94601"
-          placeholderTextColor="#000000"
-        />
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.text}>Max Distances</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="50 mi"
-          placeholderTextColor="#000000"
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.arrow}
-        onPress={() => navigation.navigate("Profile")}
-      >
-        <Image source={arrow} />
-      </TouchableOpacity>
-    </View>
+        </KeyboardAvoidingView>
+      )}
+    </ValuesContext.Consumer>
   )
 }
 
@@ -129,6 +226,7 @@ const styles = StyleSheet.create({
   header: {
     fontWeight: "bold",
     color: "#9BD09E",
+    fontSize: 17,
   },
   text: {
     fontWeight: "bold",
@@ -156,9 +254,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "25%",
   },
-  selectedText: {
-    color: "#fff",
-  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -173,12 +268,19 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     textAlign: "center",
   },
-  row: {
+  rowsContainer: {
     flexDirection: "row",
-    alignSelf: "flex-end",
-    justifyContent: "space-between",
   },
-  arrow: {
+  singleRowContainer: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    flex: 1,
+  },
+  fixText: {
+    paddingTop: "3%",
+    fontWeight: "bold",
+  },
+  arrowContainer: {
     alignSelf: "flex-end",
   },
 })

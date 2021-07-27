@@ -7,12 +7,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native"
-import logo from "../assets/logo/logo.png"
-import user from "../assets/icons/feather-user.png"
-import darkUser from "../assets/icons/dark-feather-user.png"
-import lock from "../assets/icons/material-lock-outline.png"
-import eye from "../assets/icons/feather-eye.png"
+import logo from "../assets/logo/logo3x.png"
+import user from "../assets/icons/feather-user3x.png"
+import darkUser from "../assets/icons/dark-feather-user3x.png"
+import lock from "../assets/icons/material-lock-outline3x.png"
+import greenLock from "../assets/icons/green-lock-outline2x.png"
+import eye from "../assets/icons/feather-eye3x.png"
 import emailIcon from "../assets/icons/mail_outline.png"
+import greenEmail from "../assets/icons/green-mail3x.png"
 import axios from "axios"
 
 export default function SignIn({ navigation }) {
@@ -23,6 +25,11 @@ export default function SignIn({ navigation }) {
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
   const [error, setError] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
+  const [onLastNameTouch, setOnLastNameTouch] = useState(false)
+  const [onFirstNameTouch, setOnFirstNameTouch] = useState(false)
+  const [onEmailTouch, setOnEmailTouch] = useState(false)
+  const [onPwTouch1, setOnPwTouch1] = useState(false)
+  const [onPwTouch2, setOnPwTouch2] = useState(false)
 
   const onChangeFirstName = (text) => {
     setFirstName(text)
@@ -65,7 +72,7 @@ export default function SignIn({ navigation }) {
 
       axios
         .post("http://onedayte.herokuapp.com/users", userInfo)
-        .then((res) => console.log(res.data, "Apples", userInfo))
+        .then(navigation.navigate("Sign In"))
         .catch((err) => console.log("Bananas: ", err, userInfo))
     }
   }
@@ -73,21 +80,29 @@ export default function SignIn({ navigation }) {
   return (
     <View style={styles.container}>
       <View>
-        <Image source={logo} />
+        <Image source={logo} style={styles.logo} />
         <View style={styles.inputSection}>
-          <Image source={user} style={styles.icons} />
+          <Image
+            source={onLastNameTouch ? user : darkUser}
+            style={styles.userIcon}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Last Name*"
-            placeholderTextColor="#9BD09E"
+            placeholderTextColor="#8C8C8C"
             textAlign="left"
             spellCheck={false}
             value={lastName}
             onChangeText={(text) => onChangeLastName(text)}
+            onTouchStart={() => setOnLastNameTouch(true)}
+            onBlur={() => setOnLastNameTouch(false)}
           />
         </View>
         <View style={styles.inputSection}>
-          <Image source={darkUser} style={styles.icons} />
+          <Image
+            source={onFirstNameTouch ? user : darkUser}
+            style={styles.userIcon}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="First Name*"
@@ -96,10 +111,15 @@ export default function SignIn({ navigation }) {
             spellCheck={false}
             value={firstName}
             onChangeText={(text) => onChangeFirstName(text)}
+            onTouchStart={() => setOnFirstNameTouch(true)}
+            onBlur={() => setOnFirstNameTouch(false)}
           />
         </View>
         <View style={styles.inputSection}>
-          <Image source={emailIcon} style={styles.icons} />
+          <Image
+            source={onEmailTouch ? greenEmail : emailIcon}
+            style={styles.userIcon}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Email*"
@@ -108,10 +128,15 @@ export default function SignIn({ navigation }) {
             spellCheck={false}
             value={email}
             onChangeText={(text) => onChangeEmail(text)}
+            onTouchStart={() => setOnEmailTouch(true)}
+            onBlur={() => setOnEmailTouch(false)}
           />
         </View>
         <View style={styles.inputSection}>
-          <Image source={lock} style={styles.icons} />
+          <Image
+            source={onPwTouch1 ? greenLock : lock}
+            style={styles.lockIcon}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Password*"
@@ -120,11 +145,16 @@ export default function SignIn({ navigation }) {
             secureTextEntry
             value={password}
             onChangeText={(text) => onChangePassword(text)}
+            onTouchStart={() => setOnPwTouch1(true)}
+            onBlur={() => setOnPwTouch1(false)}
           />
           <Image source={eye} style={styles.eye} />
         </View>
         <View style={styles.inputSection}>
-          <Image source={lock} style={styles.icons} />
+          <Image
+            source={onPwTouch2 ? greenLock : lock}
+            style={styles.lockIcon}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Confirm Password"
@@ -133,6 +163,8 @@ export default function SignIn({ navigation }) {
             secureTextEntry
             value={passwordConfirmation}
             onChangeText={(text) => onChangePasswordConfirmation(text)}
+            onTouchStart={() => setOnPwTouch2(true)}
+            onBlur={() => setOnPwTouch2(false)}
           />
           <Image source={eye} style={styles.eye} />
         </View>
@@ -178,6 +210,10 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     paddingRight: "5%",
   },
+  logo: {
+    height: 125,
+    width: 350,
+  },
   textInput: {
     backgroundColor: "#F5F5F5",
     width: "100%",
@@ -216,15 +252,27 @@ const styles = StyleSheet.create({
   bottomComponent: {
     width: "100%",
   },
-  icons: {
+  userIcon: {
     zIndex: 1,
     position: "absolute",
+    height: "74%",
+    width: "7.5%",
     //need this responsive
     marginLeft: 10,
+  },
+  lockIcon: {
+    zIndex: 1,
+    position: "absolute",
+    height: "73%",
+    width: "6.3%",
+    //need this responsive
+    marginLeft: 12,
   },
   eye: {
     zIndex: 1,
     position: "absolute",
+    height: "67%",
+    width: "10%",
     //need this responsive
     marginLeft: 325,
   },

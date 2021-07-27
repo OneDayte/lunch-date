@@ -1,4 +1,3 @@
-import { NavigationHelpersContext } from "@react-navigation/core"
 import React from "react"
 import {
   View,
@@ -8,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native"
-import eye from "../assets/icons/feather-eye.png"
+import eye from "../assets/icons/feather-eye3x.png"
 
 export default function CreateNewPw({ navigation }) {
   return (
@@ -82,6 +81,8 @@ const styles = StyleSheet.create({
   eye: {
     zIndex: 1,
     position: "absolute",
+    height: "67%",
+    width: "10%",
     //need this responsive
     marginLeft: 325,
   },
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
   greenText: {
     color: "#9BD09E",
     fontWeight: "bold",
+    fontSize: 17,
   },
   grayText: {
     color: "#8C8C8C",
