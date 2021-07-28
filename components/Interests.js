@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, { useState } from "react"
 import {
   View,
   Text,
@@ -12,47 +12,16 @@ import arrow from "../assets/icons/arrow.png"
 import { ValuesContext } from "./context/context"
 
 export default function Interests({ navigation }) {
-  const [menSelected, setMenSelected] = useState(true)
-  const [womenSelected, setWomenSelected] = useState(false)
-  const [nonBinarySelected, setNonBinarySelected] = useState(false)
+  const [genderSelect, setGenderSelect] = useState("men")
 
-  const [casualSelected, setCasualSelected] = useState(true)
-  const [seriousSelected, setSeriousSelected] = useState(false)
+  const [preferenceSelect, setPreferenceSelect] = useState("casual")
 
-  const [ageMin, setAgeMin] = useState("")
-  const [ageMax, setAgeMax] = useState("")
+  const [ageMin, setAgeMin] = useState("18")
+  const [ageMax, setAgeMax] = useState("25")
 
-  const [location, setLocation] = useState("")
-  const [zipCode, setZipCode] = useState("")
-  const [maxDistance, setMaxDistance] = useState("")
-
-  const next = () => navigation.navigate("Profile")
-
-  const selectGender = (gender) => {
-    if (gender === "women") {
-      setWomenSelected(true)
-      setMenSelected(false)
-      setNonBinarySelected(false)
-    } else if (gender === "men") {
-      setMenSelected(true)
-      setWomenSelected(false)
-      setNonBinarySelected(false)
-    } else if (gender === "non-binary") {
-      setNonBinarySelected(true)
-      setMenSelected(false)
-      setWomenSelected(false)
-    }
-  }
-
-  const typeSelection = (type) => {
-    if (type === "casual") {
-      setCasualSelected(true)
-      setSeriousSelected(false)
-    } else if (type === "serious") {
-      setSeriousSelected(true)
-      setCasualSelected(false)
-    }
-  }
+  const [location, setLocation] = useState("Oakland")
+  const [zipCode, setZipCode] = useState("94501")
+  const [maxDistance, setMaxDistance] = useState("10")
 
   const onChangeAgeMin = (text) => {
     setAgeMin(text)
@@ -79,34 +48,52 @@ export default function Interests({ navigation }) {
             <Text style={styles.text}>Interest In</Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                style={menSelected ? styles.button : styles.notSelectedBtn}
-                onPress={() => selectGender("men")}
+                style={
+                  genderSelect === "men" ? styles.button : styles.notSelectedBtn
+                }
+                onPress={() => setGenderSelect("men")}
               >
                 <Text
-                  style={menSelected ? { color: "#fff" } : { color: "#000" }}
+                  style={
+                    genderSelect === "men"
+                      ? { color: "#fff" }
+                      : { color: "#000" }
+                  }
                 >
                   Men
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={womenSelected ? styles.button : styles.notSelectedBtn}
-                onPress={() => selectGender("women")}
+                style={
+                  genderSelect === "women"
+                    ? styles.button
+                    : styles.notSelectedBtn
+                }
+                onPress={() => setGenderSelect("women")}
               >
                 <Text
-                  style={womenSelected ? { color: "#fff" } : { color: "#000" }}
+                  style={
+                    genderSelect === "women"
+                      ? { color: "#fff" }
+                      : { color: "#000" }
+                  }
                 >
                   Women
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
-                  nonBinarySelected ? styles.button : styles.notSelectedBtn
+                  genderSelect === "non_binary"
+                    ? styles.button
+                    : styles.notSelectedBtn
                 }
-                onPress={() => selectGender("non-binary")}
+                onPress={() => setGenderSelect("non_binary")}
               >
                 <Text
                   style={
-                    nonBinarySelected ? { color: "#fff" } : { color: "#000" }
+                    genderSelect === "non_binary"
+                      ? { color: "#fff" }
+                      : { color: "#000" }
                   }
                 >
                   Non Binary
@@ -118,22 +105,36 @@ export default function Interests({ navigation }) {
             <Text style={styles.text}>Relationship Type</Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                style={casualSelected ? styles.button : styles.notSelectedBtn}
-                onPress={() => typeSelection("casual")}
+                style={
+                  preferenceSelect === "casual"
+                    ? styles.button
+                    : styles.notSelectedBtn
+                }
+                onPress={() => setPreferenceSelect("casual")}
               >
                 <Text
-                  style={casualSelected ? { color: "#fff" } : { color: "#000" }}
+                  style={
+                    preferenceSelect === "casual"
+                      ? { color: "#fff" }
+                      : { color: "#000" }
+                  }
                 >
                   Casual
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={seriousSelected ? styles.button : styles.notSelectedBtn}
-                onPress={() => typeSelection("serious")}
+                style={
+                  preferenceSelect === "serious"
+                    ? styles.button
+                    : styles.notSelectedBtn
+                }
+                onPress={() => setPreferenceSelect("serious")}
               >
                 <Text
                   style={
-                    seriousSelected ? { color: "#fff" } : { color: "#000" }
+                    preferenceSelect === "serious"
+                      ? { color: "#fff" }
+                      : { color: "#000" }
                   }
                 >
                   Serious
@@ -165,10 +166,10 @@ export default function Interests({ navigation }) {
           </View>
           <View style={styles.rowsContainer}>
             <View style={styles.singleRowContainer}>
-              <Text style={styles.fixText}>Location</Text>
+              <Text style={styles.fixText}>City</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="Oakland, CA"
+                placeholder="Oakland"
                 placeholderTextColor="#000000"
                 onChangeText={onChangeLocation}
               />
@@ -179,9 +180,10 @@ export default function Interests({ navigation }) {
               <Text style={styles.fixText}>Zipcode</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="94601"
+                placeholder="94501"
+                maxLength={5}
                 placeholderTextColor="#000000"
-                onChangeZipCode={onChangeZipCode}
+                onChangeText={onChangeZipCode}
               />
             </View>
           </View>
@@ -190,7 +192,7 @@ export default function Interests({ navigation }) {
               <Text style={styles.fixText}>Max Distances</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="50 mi"
+                placeholder="10 mi"
                 placeholderTextColor="#000000"
                 keyboardType="numeric"
                 maxLength={5}
@@ -201,8 +203,16 @@ export default function Interests({ navigation }) {
           <TouchableOpacity
             style={styles.arrowContainer}
             onPress={() => {
-              next()
-              context.changeValues(location)
+              navigation.navigate("Profile")
+              context.changeValues({
+                city: location,
+                zip_code: Number(zipCode),
+                preference: genderSelect,
+                relationship_type: preferenceSelect,
+                lower_bound_range: Number(ageMin),
+                upper_bound_range: Number(ageMax),
+                max_distance: Number(maxDistance),
+              })
             }}
           >
             <Image source={arrow} />

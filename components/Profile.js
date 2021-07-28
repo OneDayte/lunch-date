@@ -1,106 +1,156 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
-  Image,
   TouchableOpacity,
 } from "react-native"
-import location from "../assets/icons/location.png"
-import RadioButton from "./radio"
+import { ValuesContext } from "./context/context"
 
 export default function Profile({ navigation }) {
+  const [day, setDay] = useState("27")
+  const [month, setMonth] = useState("June")
+  const [year, setYear] = useState("1990")
+
+  const [myGender, setMyGender] = useState("male")
+
+  const [about, setAbout] = useState("")
+
+  const onChangeDay = (text) => {
+    setDay(text)
+  }
+  const onChangeMonth = (text) => {
+    setMonth(text)
+  }
+  const onChangeYear = (text) => {
+    setYear(text)
+  }
+
+  const onChangeAbout = (text) => {
+    setAbout(text)
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.inputSection}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Name"
-          placeholderTextColor="#000000"
-          textAlign="left"
-        />
-      </View>
-      <Text>{"\n"}</Text>
-      <Text>Birthday {"\n"}</Text>
-      <View style={styles.buttonContainer}>
-        <TextInput
-          style={styles.birthday}
-          placeholder="27"
-          placeholderTextColor="#000000"
-          textAlign="center"
-        />
-        <TextInput
-          style={styles.birthday}
-          placeholder="June"
-          placeholderTextColor="#000000"
-          textAlign="center"
-        />
-        <TextInput
-          style={styles.birthday}
-          placeholder="1990"
-          placeholderTextColor="#000000"
-          textAlign="center"
-        />
-      </View>
-      <Text>{"\n"}</Text>
-      <View style={styles.locationSection}>
-        <TextInput
-          style={styles.locInput}
-          placeholder="Location"
-          textAlign="left"
-          placeholderTextColor="#000000"
-        />
-        <Image source={location} style={styles.location} />
-        <TextInput
-          style={styles.zipInput}
-          placeholder="Zipcode"
-          textAlign="left"
-          placeholderTextColor="#000000"
-        />
-      </View>
-      <Text>{"\n"}</Text>
-      <Text>Gender</Text>
-      <View style={styles.genderContainer}>
-        <View style={styles.gender}>
-          <RadioButton style={styles.radio} />
-          <Text style={styles.genderText}>Man</Text>
+    <ValuesContext.Consumer>
+      {(context) => (
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.boldText}>Birthday</Text>
+            <View style={styles.buttonContainer}>
+              <TextInput
+                style={styles.birthday}
+                placeholder="27"
+                placeholderTextColor="#000000"
+                textAlign="center"
+                onChangeText={onChangeDay}
+              />
+              <TextInput
+                style={styles.birthday}
+                placeholder="June"
+                placeholderTextColor="#000000"
+                textAlign="center"
+                onChangeText={onChangeMonth}
+              />
+              <TextInput
+                style={styles.birthday}
+                placeholder="1990"
+                placeholderTextColor="#000000"
+                textAlign="center"
+                onChangeText={onChangeYear}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.boldText}>Gender</Text>
+            <View style={styles.genderContainer}>
+              <TouchableOpacity
+                style={
+                  myGender === "male" ? styles.button : styles.notSelectedBtn
+                }
+                onPress={() => setMyGender("male")}
+              >
+                <Text
+                  style={
+                    myGender === "male" ? { color: "#fff" } : { color: "#000" }
+                  }
+                >
+                  Male
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  myGender === "female" ? styles.button : styles.notSelectedBtn
+                }
+                onPress={() => setMyGender("female")}
+              >
+                <Text
+                  style={
+                    myGender === "female"
+                      ? { color: "#fff" }
+                      : { color: "#000" }
+                  }
+                >
+                  Female
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  myGender === "non_binary"
+                    ? styles.button
+                    : styles.notSelectedBtn
+                }
+                onPress={() => setMyGender("non_binary")}
+              >
+                <Text
+                  style={
+                    myGender === "non_binary"
+                      ? { color: "#fff" }
+                      : { color: "#000" }
+                  }
+                >
+                  Non Binary
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.aboutHeader}>About</Text>
+            <TextInput
+              style={styles.about}
+              placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
+              placeholderTextColor="#000000"
+              multiline={true}
+              numberOfLines={10}
+              onChangeText={onChangeAbout}
+            />
+            <TouchableOpacity
+              style={styles.addImgButton}
+              onPress={() => {
+                navigation.navigate("Add Images")
+                // context.changeValues({
+                //   gender: myGender,
+                //   birth_date: Number(day),
+                //   about: about,
+                // })
+              }}
+            >
+              <Text style={styles.addImgText}>Add Images</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.gender}>
-          <RadioButton style={styles.radio} />
-          <Text style={styles.genderText}>Woman</Text>
-        </View>
-      </View>
-      <Text>{"\n"}</Text>
-      <View>
-        <Text style={styles.aboutHeader}>About</Text>
-        <TextInput
-          style={styles.about}
-          placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
-          placeholderTextColor="#000000"
-          multiline={true}
-          numberOfLines={10}
-        />
-      </View>
-      <View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Add Images")}
-        >
-          <Text style={styles.addImgText}>Add Images</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      )}
+    </ValuesContext.Consumer>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-evenly",
     backgroundColor: "#fff",
-    paddingTop: "10%",
-    paddingLeft: "5%",
-    paddingRight: "5%",
+    paddingLeft: "10%",
+    paddingRight: "10%",
   },
   inputSection: {
     flexDirection: "row",
@@ -147,7 +197,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     width: "100%",
     marginTop: "2.5%",
   },
@@ -158,6 +208,7 @@ const styles = StyleSheet.create({
   genderContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
+    marginTop: "2.5%",
   },
   gender: {
     flexDirection: "row",
@@ -167,7 +218,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingTop: 5,
   },
-  button: {
+  addImgButton: {
     backgroundColor: "#9BD09E",
     height: 54,
     borderRadius: 30,
@@ -176,6 +227,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginTop: "10%",
+  },
+  button: {
+    backgroundColor: "#9BD09E",
+    height: 42,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "25%",
+  },
+  notSelectedBtn: {
+    backgroundColor: "#F6F6F6",
+    height: 42,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "25%",
   },
   birthday: {
     backgroundColor: "#F5F5F5",
@@ -205,6 +272,9 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingRight: 15,
     paddingBottom: 15,
+  },
+  boldText: {
+    fontWeight: "bold",
   },
   location: {
     flexDirection: "row",
