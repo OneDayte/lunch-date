@@ -42,6 +42,7 @@ export default function AddImages() {
     console.log(result)
 
     if (!result.cancelled && img === "img1") {
+      //axios call to submit image
       setPic1(result.uri)
     } else if (!result.cancelled && img === "img2") {
       setPic2(result.uri)
@@ -109,7 +110,7 @@ export default function AddImages() {
           </View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => alert(context.submitValues)}
+            onPress={() => alert(JSON.stringify(context.submitValues))}
           >
             <Text style={styles.text1}>Continue</Text>
           </TouchableOpacity>

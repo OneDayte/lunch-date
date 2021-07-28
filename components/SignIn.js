@@ -11,7 +11,7 @@ import {
 import logo from "../assets/logo/logo3x.png"
 import user from "../assets/icons/feather-user3x.png"
 import lock from "../assets/icons/material-lock-outline3x.png"
-import greenLock from "../assets/icons/green-lock-outline2x.png"
+import greenLock from "../assets/icons/green-lock-outline3x.png"
 import eye from "../assets/icons/feather-eye3x.png"
 import darkUser from "../assets/icons/dark-feather-user3x.png"
 import { useFonts } from "expo-font"
@@ -91,40 +91,6 @@ export default function SignIn({ navigation }) {
         console.log(err)
       })
   }
-
-  const setUserToken = (token) => {
-    return SecureStore.setItemAsync('secure_token', token);
-  };
-
-  const getUserToken = () => {
-    return SecureStore.getItemAsync('secure_token');
-  };
-
-  axios.post("http://onedayte.herokuapp.com/auth/sign_in/", signInObject)
-  .then(response => {
-    setUserToken(response.data.jwt)
-
-    axios.get("http://onedayte.herokuapp.com/users/confirmed_user",  {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': response.data.jwt
-      }
-    })
-    .then((second_response) => {
-      if (!second_response.data.completed_info) {
-        navigation.navigate("Interests")
-      } else {
-        //this is where navigation should go if they have already completed their information.
-      }
-    })
-
-    // getUserToken().then(a => console.log(a))
-  })
-  .catch((err) => {
-    // to do handle error/ invalid log in
-    console.log(err)
-  })
-}
 
   if (!fontsLoaded) {
     return <AppLoading />
