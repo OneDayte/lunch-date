@@ -128,11 +128,11 @@ export default function Profile({ navigation }) {
               style={styles.addImgButton}
               onPress={() => {
                 navigation.navigate("Add Images")
-                // context.changeValues({
-                //   gender: myGender,
-                //   birth_date: Number(day),
-                //   about: about,
-                // })
+                context.changeValues({
+                  gender: myGender,
+                  birth_date: `${month} ${day}, ${year}`,
+                  about: about,
+                })
               }}
             >
               <Text style={styles.addImgText}>Add Images</Text>

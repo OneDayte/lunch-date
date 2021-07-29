@@ -49,15 +49,7 @@ function Header(props) {
 }
 
 export default function App() {
-  const [userValues, setUserValues] = useState({
-    city: "",
-    zip_code: "",
-    preference: "",
-    relationship_type: "",
-    lower_bound_range: "",
-    upper_bound_range: "",
-    max_distance: "",
-  })
+  const [userValues, setUserValues] = useState()
 
   const valuesFunction = (props) => {
     setUserValues((prevState) => ({
