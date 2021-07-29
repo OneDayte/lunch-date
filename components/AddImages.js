@@ -10,6 +10,7 @@ import {
 import addImgBtn from "../assets/icons/addImgBtn3x.png"
 import * as ImagePicker from "expo-image-picker"
 import { ValuesContext } from "./context/context"
+import axios from "axios"
 
 export default function AddImages() {
   const [pic1, setPic1] = useState(null)
@@ -110,7 +111,20 @@ export default function AddImages() {
           </View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => alert(JSON.stringify(context.submitValues))}
+            onPress={() => {
+              axios
+                .put("https://www.onedayte.herokuapp.com/users/", {
+                  ...context.submitValues,
+                  picture_one: pic1,
+                  picture_two: pic2,
+                  picture_three: pic3,
+                  picture_four: pic4,
+                  picture_five: pic5,
+                  picture_six: pic6,
+                })
+                .then((res) => console.log(res.data))
+                .catch((err) => console.log(err))
+            }}
           >
             <Text style={styles.text1}>Continue</Text>
           </TouchableOpacity>
