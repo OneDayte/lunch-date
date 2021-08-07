@@ -11,6 +11,7 @@ import addImgBtn from "../assets/icons/addImgBtn3x.png"
 import * as ImagePicker from "expo-image-picker"
 import { ValuesContext } from "./context/context"
 import axios from "axios"
+import * as SecureStore from "expo-secure-store"
 
 export default function AddImages() {
   const [pic1, setPic1] = useState(null)
@@ -112,8 +113,16 @@ export default function AddImages() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              axios
-                .put("https://www.onedayte.herokuapp.com/users/", {
+              SecureStore.getItemAsync("secure_token")
+              .then((token) => {
+                let axiosConfig = {
+                  headers: {
+                    'Authorization': token,
+                  }
+                };
+
+                axios
+                .put("http://onedayte.herokuapp.com/users/1", {
                   ...context.submitValues,
                   picture_one: pic1,
                   picture_two: pic2,
@@ -121,9 +130,12 @@ export default function AddImages() {
                   picture_four: pic4,
                   picture_five: pic5,
                   picture_six: pic6,
-                })
+                },
+                axiosConfig
+                )
                 .then((res) => console.log(res.data))
                 .catch((err) => console.log(err))
+              })
             }}
           >
             <Text style={styles.text1}>Continue</Text>
