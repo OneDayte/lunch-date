@@ -12,6 +12,8 @@ import Profile from "./components/Profile"
 import AddImages from "./components/AddImages"
 import backArrow from "./assets/icons/back-arrow3x.png"
 import { ValuesContext } from "./components/context/context"
+import BottomTabPage from "./components/BottomTabPage"
+import FullProfilePreview from "./components/FullProfilePreview"
 
 const Stack = createStackNavigator()
 
@@ -122,6 +124,24 @@ export default function App() {
               headerTitle: false,
               headerBackImage: () => <Header page={"Profile"} />,
               headerBackTitleVisible: false,
+            }}
+          />
+          <Stack.Screen
+            name="Profile Preview"
+            component={FullProfilePreview}
+            options={{
+              headerTitle: "Profile Preview",
+              headerTitleStyle: { fontWeight: "bold", color: "#9BD09E" },
+              headerLeft: false,
+            }}
+          />
+          <Stack.Screen
+            name="Bottom Tab Page"
+            component={BottomTabPage}
+            options={{
+              headerTitle: "Bottom Tab Page",
+              headerTitleStyle: { fontWeight: "bold", color: "#9BD09E" },
+              headerLeft: false,
             }}
           />
         </Stack.Navigator>
