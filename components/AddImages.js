@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import {
   View,
   Text,
@@ -13,13 +13,15 @@ import { ValuesContext } from "./context/context"
 import axios from "axios"
 import * as SecureStore from "expo-secure-store"
 
-export default function AddImages() {
+export default function AddImages({ navigation }) {
   const [pic1, setPic1] = useState(null)
   const [pic2, setPic2] = useState(null)
   const [pic3, setPic3] = useState(null)
   const [pic4, setPic4] = useState(null)
   const [pic5, setPic5] = useState(null)
   const [pic6, setPic6] = useState(null)
+
+  const allContext = useContext(ValuesContext)
 
   useEffect(() => {
     ;(async () => {
@@ -44,7 +46,6 @@ export default function AddImages() {
     console.log(result)
 
     if (!result.cancelled && img === "img1") {
-      //axios call to submit image
       setPic1(result.uri)
     } else if (!result.cancelled && img === "img2") {
       setPic2(result.uri)
@@ -59,90 +60,108 @@ export default function AddImages() {
     }
   }
 
-  return (
-    <ValuesContext.Consumer>
-      {(context) => (
-        <View style={styles.container}>
-          <Text style={styles.text0}>
-            Make sure your photos are clearly visible.
-          </Text>
-          <View style={styles.imgContainer}>
-            <TouchableOpacity
-              style={styles.imgButton}
-              onPress={() => uploadImgs("img1")}
-            >
-              <Image source={{ uri: pic1 }} style={styles.img} />
-              <Image source={addImgBtn} style={styles.iconPadding} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.imgButton}
-              onPress={() => uploadImgs("img2")}
-            >
-              <Image source={{ uri: pic2 }} style={styles.img} />
-              <Image source={addImgBtn} style={styles.iconPadding} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.imgButton}
-              onPress={() => uploadImgs("img3")}
-            >
-              <Image source={{ uri: pic3 }} style={styles.img} />
-              <Image source={addImgBtn} style={styles.iconPadding} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.imgButton}
-              onPress={() => uploadImgs("img4")}
-            >
-              <Image source={{ uri: pic4 }} style={styles.img} />
-              <Image source={addImgBtn} style={styles.iconPadding} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.imgButton}
-              onPress={() => uploadImgs("img5")}
-            >
-              <Image source={{ uri: pic5 }} style={styles.img} />
-              <Image source={addImgBtn} style={styles.iconPadding} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.imgButton}
-              onPress={() => uploadImgs("img6")}
-            >
-              <Image source={{ uri: pic6 }} style={styles.img} />
-              <Image source={addImgBtn} style={styles.iconPadding} />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              SecureStore.getItemAsync("secure_token")
-              .then((token) => {
-                let axiosConfig = {
-                  headers: {
-                    'Authorization': token,
-                  }
-                };
+  const submitAll = () => {
+    if (
+      (pic1 === null) &
+      (pic2 === null) &
+      (pic3 === null) &
+      (pic4 === null) &
+      (pic5 === null) &
+      (pic6 === null)
+    ) {
+      alert("Please upload at least one photo!")
+    } else {
+      SecureStore.getItemAsync("secure_token").then((token) => {
+        let axiosConfig = {
+          headers: {
+            Authorization: token,
+          },
+        }
 
-                axios
-                .put("http://onedayte.herokuapp.com/users/1", {
-                  ...context.submitValues,
-                  picture_one: pic1,
-                  picture_two: pic2,
-                  picture_three: pic3,
-                  picture_four: pic4,
-                  picture_five: pic5,
-                  picture_six: pic6,
-                },
-                axiosConfig
-                )
-                .then((res) => console.log(res.data))
-                .catch((err) => console.log(err))
-              })
-            }}
-          >
-            <Text style={styles.text1}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </ValuesContext.Consumer>
+        axios
+          .put(
+            "http://onedayte.herokuapp.com/users/1",
+            {
+              ...allContext.submitValues,
+              picture_one: pic1,
+              picture_two: pic2,
+              picture_three: pic3,
+              picture_four: pic4,
+              picture_five: pic5,
+              picture_six: pic6,
+            },
+            axiosConfig
+          )
+          .then((res) => {
+            console.log(res.data)
+            allContext.changeValues({
+              picture_one: pic1,
+              picture_two: pic2,
+              picture_three: pic3,
+              picture_four: pic4,
+              picture_five: pic5,
+              picture_six: pic6,
+            })
+            navigation.navigate("Profile Preview")
+          })
+          .catch((err) => console.log(err))
+      })
+    }
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text0}>
+        Make sure your photos are clearly visible.
+      </Text>
+      <View style={styles.imgContainer}>
+        <TouchableOpacity
+          style={styles.imgButton}
+          onPress={() => uploadImgs("img1")}
+        >
+          <Image source={{ uri: pic1 }} style={styles.img} />
+          <Image source={addImgBtn} style={styles.iconPadding} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.imgButton}
+          onPress={() => uploadImgs("img2")}
+        >
+          <Image source={{ uri: pic2 }} style={styles.img} />
+          <Image source={addImgBtn} style={styles.iconPadding} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.imgButton}
+          onPress={() => uploadImgs("img3")}
+        >
+          <Image source={{ uri: pic3 }} style={styles.img} />
+          <Image source={addImgBtn} style={styles.iconPadding} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.imgButton}
+          onPress={() => uploadImgs("img4")}
+        >
+          <Image source={{ uri: pic4 }} style={styles.img} />
+          <Image source={addImgBtn} style={styles.iconPadding} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.imgButton}
+          onPress={() => uploadImgs("img5")}
+        >
+          <Image source={{ uri: pic5 }} style={styles.img} />
+          <Image source={addImgBtn} style={styles.iconPadding} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.imgButton}
+          onPress={() => uploadImgs("img6")}
+        >
+          <Image source={{ uri: pic6 }} style={styles.img} />
+          <Image source={addImgBtn} style={styles.iconPadding} />
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={submitAll}>
+        <Text style={styles.text1}>Continue</Text>
+      </TouchableOpacity>
+    </View>
   )
 }
 

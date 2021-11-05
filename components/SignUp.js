@@ -17,7 +17,7 @@ import emailIcon from "../assets/icons/mail_outline.png"
 import greenEmail from "../assets/icons/green-mail3x.png"
 import axios from "axios"
 
-export default function SignIn({ navigation }) {
+export default function SignUp({ navigation }) {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
