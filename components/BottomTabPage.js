@@ -4,7 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import message from "../assets/icons/message.png"
 import heartbeat from "../assets/icons/heartbeat.png"
 import profile from "../assets/icons/profile.png"
-import Example from "./example"
+import Match from "./Match"
+import Messages from "./Messages"
 import FullProfilePreview from "./FullProfilePreview"
 
 export default function BottomTabPage() {
@@ -25,8 +26,8 @@ export default function BottomTabPage() {
           },
         })}
       >
-        <Tab.Screen name="Messages" component={Example} />
-        <Tab.Screen name="Match" component={Example} />
+        <Tab.Screen name="Messages" component={Messages} />
+        <Tab.Screen name="Match" component={Match} />
         <Tab.Screen name="Profile Preview" component={FullProfilePreview} />
       </Tab.Navigator>
     </View>
@@ -35,6 +36,9 @@ export default function BottomTabPage() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#fff",
+    paddingLeft: "5%",
+    paddingRight: "5%",
   },
 })
