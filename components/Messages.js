@@ -8,8 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native"
 import msgBtn from "../assets/icons/msgBtn3x.png"
-import picImgIcon from "../assets/icons/pickImg3x.png"
-import cameraIcon from "../assets/icons/camera3x.png"
 
 const messageArray = [
   {
@@ -86,10 +84,6 @@ export default function Messages() {
         <TouchableOpacity onPress={submitMsg} style={styles.msgBtnContainer}>
           <Image style={styles.msgBtn} source={msgBtn} />
         </TouchableOpacity>
-        <View style={styles.leftIcons}>
-          <Image style={styles.cameraBtn} source={cameraIcon} />
-          <Image style={styles.pickImgBtn} source={picImgIcon} />
-        </View>
       </View>
     </View>
   )
@@ -104,23 +98,6 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     paddingRight: "5%",
   },
-  leftIcons: {
-    flexDirection: "row",
-    position: "absolute",
-    height: 42,
-    alignItems: "center",
-    paddingLeft: "25%",
-    width: "25%",
-    justifyContent: "space-between",
-  },
-  cameraBtn: {
-    height: 20,
-    width: 26,
-  },
-  pickImgBtn: {
-    height: 20,
-    width: 20,
-  },
   textInput: {
     backgroundColor: "#F5F5F5",
     width: "100%",
@@ -130,7 +107,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 20,
     textAlign: "left",
-    paddingLeft: "15%",
+    paddingLeft: "2.5%",
   },
   msgBtnContainer: {
     position: "absolute",
